@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contribution Page</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cabin:ital,wght@0,400..700;1,400..700&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Cabin', 'sans-serif'],
+          },
+          colors: {
+            slate: {
+              850: '#151e2e',
+              900: '#0f172a',
+              950: '#080d1a',
+            }
+          }
+        }
+      }
+    }
+  </script>
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen font-sans antialiased flex flex-col selection:bg-indigo-500 selection:text-white">
+
+  <!-- Header -->
+  <header class="border-b border-slate-800 bg-slate-900 sticky top-0 z-30">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <div class="w-9 h-9 rounded-lg bg-indigo-600 flex items-center justify-center text-white">
+          <!-- Paintbrush Icon -->
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/>
+          </svg>
+        </div>
+        <h1 class="text-xl font-bold text-white">Contribution Page</h1>
+      </div>
+
+      <div class="flex items-center gap-3">
+        <button id="contributeBtn" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-500 text-white text-xs sm:text-sm font-semibold rounded-lg transition active:scale-95 shadow-md shadow-indigo-600/20">
+          + Contribute Item
+        </button>
+
+        <a href="https://sites.google.com/view/theartisticfidgettradegroup/home" class="inline-flex items-center gap-2 px-3.5 py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs sm:text-sm font-semibold rounded-lg border border-slate-700 transition shadow-sm">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
+          </svg>
+          Return to Home
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex-1 w-full">
+
+    <!-- Search & Filter Controls -->
+    <div class="flex flex-col md:flex-row gap-4 mb-8">
+      <div class="relative flex-1">
+        <svg class="w-5 h-5 absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+        </svg>
+        <input type="text" id="searchInput" placeholder="Search..." class="w-full pl-10 pr-4 py-2 bg-slate-900 border border-slate-800 rounded-lg text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:border-indigo-500 transition">
+      </div>
+
+      <div class="flex gap-3">
+        <select id="categoryFilter" class="bg-slate-900 border border-slate-800 text-slate-300 text-sm rounded-lg px-3 py-2 focus:outline-none focus:border-indigo-500">
+          <option value="All">All Categories</option>
+          <option value="Bracelets">Bracelets</option>
+          <option value="Pop & Bubble">Pop & Bubble</option>
+          <option value="Spinners & Gears">Spinners & Gears</option>
+          <option value="Cubes & Blocks">Cubes & Blocks</option>
+          <option value="Squishies & Stress Relief">Squishies & Stress Relief</option>
+          <option value="Tangles & Flexibles">Tangles & Flexibles</option>
+          <option value="Magnetics">Magnetics</option>
+          <option value="Textural & Tactile">Textural & Tactile</option>
+        </select>
+
+        <select id="sortBy" class="bg-slate-900 border border-slate-800 text-slate-300 text-sm rounded-lg px-3 py-2 focus:outline-none focus:border-indigo-500">
+          <option value="newest">Newest First</option>
+          <option value="oldest">Oldest First</option>
+          <option value="alphabetical">A - Z</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Items Grid Container -->
+    <div id="itemsGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+
+    <!-- Empty State -->
+    <div id="emptyState" class="hidden text-center py-20 bg-slate-900 rounded-xl border border-slate-800">
+      <div class="w-16 h-16 mx-auto mb-4 rounded-full bg-slate-800 flex items-center justify-center text-slate-500">
+        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"/>
+        </svg>
+      </div>
+      <h3 class="text-lg font-semibold text-slate-200 mb-1">No items found</h3>
+      <p class="text-slate-500 text-sm max-w-sm mx-auto mb-6">Contact Kaleb Young to make a Contribution</p>
+      <button id="emptyContributeBtn" class="px-5 py-2 bg-indigo-600 hover:bg-indigo-500 text-white text-sm font-semibold rounded-lg transition">
+        Contribute Item
+      </button>
+    </div>
+
+  </main>
+
+  <!-- Contribution Modal Form -->
+  <div id="formModal" class="fixed inset-0 bg-slate-950/80 z-50 flex items-center justify-center p-4 hidden">
+    <div class="bg-slate-900 border border-slate-800 rounded-xl max-w-lg w-full p-6 relative max-h-[90vh] overflow-y-auto">
+      <div class="flex justify-between items-center mb-6">
+        <h2 class="text-xl font-bold text-white">Contribute Item</h2>
+        <button id="closeModalBtn" class="text-slate-400 hover:text-slate-200">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+        </button>
+      </div>
+
+      <form id="contributionForm" class="space-y-4">
+        <div>
+          <label class="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">Title</label>
+          <input type="text" id="itemTitle" required class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3.5 py-2 text-sm text-slate-100 focus:outline-none focus:border-indigo-500">
+        </div>
+
+        <div>
+          <label class="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">Category</label>
+          <select id="itemCategory" required class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3.5 py-2 text-sm text-slate-100 focus:outline-none focus:border-indigo-500">
+            <option value="Bracelets">Bracelets</option>
+            <option value="Pop & Bubble">Pop & Bubble</option>
+            <option value="Spinners & Gears">Spinners & Gears</option>
+            <option value="Cubes & Blocks">Cubes & Blocks</option>
+            <option value="Squishies & Stress Relief">Squishies & Stress Relief</option>
+            <option value="Tangles & Flexibles">Tangles & Flexibles</option>
+            <option value="Magnetics">Magnetics</option>
+            <option value="Textural & Tactile">Textural & Tactile</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">Description</label>
+          <textarea id="itemDescription" rows="4" required class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3.5 py-2 text-sm text-slate-100 focus:outline-none focus:border-indigo-500 resize-none"></textarea>
+        </div>
+
+        <div>
+          <label class="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">Import Image</label>
+          <div class="flex items-center gap-4">
+            <input type="file" id="itemImageInput" accept="image/*" class="hidden">
+            <button type="button" id="chooseFileBtn" class="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 rounded-lg text-sm font-semibold transition">
+              Choose File
+            </button>
+            <span id="fileNameDisplay" class="text-xs text-slate-400 truncate flex-1"></span>
+          </div>
+          <div id="imagePreviewContainer" class="mt-3 hidden relative w-24 h-24 rounded-lg overflow-hidden border border-slate-700">
+            <img id="imagePreview" class="w-full h-full object-cover" src="" alt="Preview">
+            <button type="button" id="clearImagePreviewBtn" class="absolute top-1 right-1 bg-slate-950/80 text-slate-300 hover:text-white rounded-full p-1">
+              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+            </button>
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">Contributed By</label>
+          <input type="text" id="itemAuthor" required class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3.5 py-2 text-sm text-slate-100 focus:outline-none focus:border-indigo-500">
+        </div>
+
+        <div class="flex justify-end gap-3 pt-4 border-t border-slate-800">
+          <button type="button" id="cancelFormBtn" class="px-4 py-2 text-slate-400 hover:text-white text-sm font-semibold">Cancel</button>
+          <button type="submit" id="submitBtn" class="px-5 py-2 bg-indigo-600 hover:bg-indigo-500 text-white text-sm font-semibold rounded-lg transition flex items-center gap-2">
+            Publish
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Confirm Modal -->
+  <div id="confirmModal" class="fixed inset-0 bg-slate-950/80 z-50 flex items-center justify-center p-4 hidden">
+    <div class="bg-slate-900 border border-slate-800 rounded-xl max-w-md w-full p-6 shadow-xl">
+      <h3 class="text-lg font-semibold text-white mb-2">Confirm Action</h3>
+      <p id="confirmMessage" class="text-slate-300 text-sm mb-6">Are you sure you want to delete this?</p>
+      <div class="flex justify-end gap-3">
+        <button id="confirmCancelBtn" class="px-4 py-2 text-slate-400 hover:text-white text-sm font-semibold rounded-lg border border-slate-800">Cancel</button>
+        <button id="confirmOkBtn" class="px-4 py-2 bg-rose-600 hover:bg-rose-500 text-white text-sm font-semibold rounded-lg transition">Delete</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Detail View Modal -->
+  <div id="detailModal" class="fixed inset-0 bg-slate-950/80 z-50 flex items-center justify-center p-4 hidden">
+    <div class="bg-slate-900 border border-slate-800 rounded-xl max-w-lg w-full overflow-hidden relative max-h-[90vh] flex flex-col">
+      <div id="detailImageContainer" class="w-full h-56 bg-slate-950 relative hidden border-b border-slate-800">
+        <img id="detailImage" class="w-full h-full object-cover" src="" alt="">
+      </div>
+      
+      <div class="p-6 overflow-y-auto">
+        <div class="flex justify-between items-start gap-4 mb-3">
+          <span id="detailCategory" class="px-2.5 py-1 text-xs font-semibold rounded bg-slate-800 text-indigo-400 border border-slate-700"></span>
+          <button id="closeDetailModalBtn" class="text-slate-400 hover:text-white">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+          </button>
+        </div>
+
+        <h2 id="detailTitle" class="text-2xl font-semibold text-white mb-4"></h2>
+        <div class="border-t border-slate-800 pt-4 mb-6">
+          <p id="detailDescription" class="text-slate-300 text-sm leading-relaxed whitespace-pre-wrap"></p>
+        </div>
+
+        <div class="flex items-center justify-between text-xs text-slate-500 border-t border-slate-800 pt-4">
+          <div>Contributed by: <span id="detailAuthor" class="text-slate-300 font-semibold"></span></div>
+          <div id="detailDate"></div>
+        </div>
+
+        <!-- Delete Option -->
+        <div class="border-t border-slate-800 mt-4 pt-4 flex justify-end">
+          <button id="deleteItemBtn" class="px-3.5 py-1.5 text-xs font-semibold text-rose-400 hover:text-rose-300 hover:bg-rose-950/40 border border-rose-900/50 rounded-lg transition">
+            Delete Item
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Firebase Modular v10.8.0 Script -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+    import { 
+      getFirestore, 
+      collection, 
+      addDoc, 
+      deleteDoc, 
+      doc, 
+      onSnapshot 
+    } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+    // Required exact credentials
+    const firebaseConfig = {
+      apiKey: "AIzaSyAQwZtF8Cg0Xv6VqbBmFAy-d_PVMfaGunA",
+      authDomain: "fidget-project.firebaseapp.com",
+      projectId: "fidget-project",
+      storageBucket: "fidget-project.firebasestorage.app",
+      messagingSenderId: "376335273275",
+      appId: "1:376335273275:web:8b32b50d15580c2fe3bb1e",
+      measurementId: "G-VVXFHRX4Q1"
+    };
+
+    // Global application state initialized immediately
+    let app, db;
+    let rawItems = [];
+    let currentBase64Image = '';
+    let currentDetailItemId = null;
+
+    // Local Storage synchronization fallback
+    try {
+      const cached = localStorage.getItem('fidget_items_cache');
+      if (cached) {
+        const parsed = JSON.parse(cached);
+        if (Array.isArray(parsed) && parsed.length > 0) {
+          rawItems = parsed;
+        }
+      }
+    } catch(e) { console.warn("Cache read warning:", e); }
+
+    // Initialize Firebase safely
+    try {
+      app = initializeApp(firebaseConfig);
+      db = getFirestore(app);
+
+      // Realtime listener
+      const contributionsRef = collection(db, 'fidgets');
+      onSnapshot(contributionsRef, (snapshot) => {
+        if (!snapshot.empty) {
+          const fetched = [];
+          snapshot.forEach((docSnap) => {
+            fetched.push({ id: docSnap.id, ...docSnap.data() });
+          });
+          rawItems = fetched;
+          localStorage.setItem('fidget_items_cache', JSON.stringify(rawItems));
+        } else {
+          rawItems = [];
+          localStorage.removeItem('fidget_items_cache');
+        }
+        renderItems();
+      }, (err) => {
+        console.warn("Firestore listener fallback mode:", err);
+      });
+    } catch (e) {
+      console.warn("Firebase initialization warning, operating in resilient offline mode:", e);
+    }
+
+    // Modal Control Functions
+    window.openModal = function() {
+      document.getElementById('formModal').classList.remove('hidden');
+    };
+
+    window.closeModal = function() {
+      document.getElementById('formModal').classList.add('hidden');
+      document.getElementById('contributionForm').reset();
+      clearImagePreview();
+    };
+
+    window.openDetailModal = function(id) {
+      const item = rawItems.find(i => i.id === id);
+      if (!item) return;
+
+      currentDetailItemId = id;
+      document.getElementById('detailTitle').textContent = item.title;
+      document.getElementById('detailCategory').textContent = item.category;
+      document.getElementById('detailDescription').textContent = item.description;
+      document.getElementById('detailAuthor').textContent = item.author;
+      document.getElementById('detailDate').textContent = item.date || '';
+
+      const imgContainer = document.getElementById('detailImageContainer');
+      const img = document.getElementById('detailImage');
+      if (item.image) {
+        img.src = item.image;
+        imgContainer.classList.remove('hidden');
+      } else {
+        imgContainer.classList.add('hidden');
+      }
+
+      document.getElementById('detailModal').classList.remove('hidden');
+    };
+
+    window.closeDetailModal = function() {
+      document.getElementById('detailModal').classList.add('hidden');
+      currentDetailItemId = null;
+    };
+
+    window.showConfirm = function(message, onConfirm) {
+      const modal = document.getElementById('confirmModal');
+      const msgElem = document.getElementById('confirmMessage');
+      const okBtn = document.getElementById('confirmOkBtn');
+      const cancelBtn = document.getElementById('confirmCancelBtn');
+
+      msgElem.textContent = message;
+      modal.classList.remove('hidden');
+
+      const handleOk = () => {
+        modal.classList.add('hidden');
+        okBtn.removeEventListener('click', handleOk);
+        cancelBtn.removeEventListener('click', handleCancel);
+        onConfirm();
+      };
+
+      const handleCancel = () => {
+        modal.classList.add('hidden');
+        okBtn.removeEventListener('click', handleOk);
+        cancelBtn.removeEventListener('click', handleCancel);
+      };
+
+      okBtn.addEventListener('click', handleOk);
+      cancelBtn.addEventListener('click', handleCancel);
+    };
+
+    // Render Function
+    window.renderItems = function() {
+      const searchQuery = (document.getElementById('searchInput')?.value || '').toLowerCase();
+      const categoryFilter = document.getElementById('categoryFilter')?.value || 'All';
+      const sortBy = document.getElementById('sortBy')?.value || 'newest';
+
+      let filtered = rawItems.filter(item => {
+        const matchesSearch = (item.title || '').toLowerCase().includes(searchQuery) ||
+                              (item.description || '').toLowerCase().includes(searchQuery);
+        const matchesCategory = categoryFilter === 'All' || item.category === categoryFilter;
+        return matchesSearch && matchesCategory;
+      });
+
+      if (sortBy === 'newest') {
+        filtered.sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0));
+      } else if (sortBy === 'oldest') {
+        filtered.sort((a, b) => (a.timestamp || 0) - (b.timestamp || 0));
+      } else if (sortBy === 'alphabetical') {
+        filtered.sort((a, b) => (a.title || '').localeCompare(b.title || ''));
+      }
+
+      const grid = document.getElementById('itemsGrid');
+      const emptyState = document.getElementById('emptyState');
+
+      if (!grid) return;
+
+      if (filtered.length === 0) {
+        grid.innerHTML = '';
+        emptyState.classList.remove('hidden');
+        return;
+      }
+
+      emptyState.classList.add('hidden');
+      grid.innerHTML = filtered.map(item => `
+        <div data-id="${item.id}" class="card-item bg-slate-900 border border-slate-800 rounded-xl overflow-hidden hover:border-slate-700 transition cursor-pointer flex flex-col group relative shadow-sm hover:shadow-indigo-500/5">
+          ${item.image ? `
+            <div class="h-44 bg-slate-950 relative overflow-hidden border-b border-slate-800">
+              <img src="${item.image}" class="w-full h-full object-cover group-hover:scale-105 transition duration-300" alt="${item.title}">
+            </div>
+          ` : ''}
+          <div class="p-5 flex-1 flex flex-col">
+            <div class="flex justify-between items-center mb-2">
+              <span class="px-2 py-0.5 text-[11px] font-semibold rounded bg-slate-800 text-indigo-400 border border-slate-700">${item.category}</span>
+              <span class="text-[11px] text-slate-500">${item.date || ''}</span>
+            </div>
+            <h3 class="font-semibold text-slate-100 group-hover:text-indigo-400 transition text-base mb-1">${item.title}</h3>
+            <p class="text-xs text-slate-400 line-clamp-3 flex-1 mb-4 leading-relaxed">${item.description}</p>
+            <div class="flex items-center justify-between text-[11px] text-slate-500 pt-3 border-t border-slate-800">
+              <span>By <strong class="text-slate-400 font-semibold">${item.author}</strong></span>
+              <button data-delete-id="${item.id}" class="delete-btn text-rose-400 hover:text-rose-300 font-semibold px-2 py-0.5 rounded hover:bg-rose-950/40 transition">
+                Delete
+              </button>
+            </div>
+          </div>
+        </div>
+      `).join('');
+
+      // Attach Card Click and Delete listeners
+      document.querySelectorAll('.card-item').forEach(card => {
+        card.addEventListener('click', (e) => {
+          if (e.target.closest('.delete-btn')) return;
+          openDetailModal(card.getAttribute('data-id'));
+        });
+      });
+
+      document.querySelectorAll('.delete-btn').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          deleteSingleItem(btn.getAttribute('data-delete-id'));
+        });
+      });
+    };
+
+    // Item Deletion
+    window.deleteSingleItem = function(id) {
+      window.showConfirm('Are you sure you want to delete this item?', async () => {
+        if (db) {
+          try {
+            await deleteDoc(doc(db, 'fidgets', id));
+          } catch (err) {
+            console.warn("Remote delete warning:", err);
+          }
+        }
+        rawItems = rawItems.filter(item => item.id !== id);
+        localStorage.setItem('fidget_items_cache', JSON.stringify(rawItems));
+        closeDetailModal();
+        renderItems();
+      });
+    };
+
+    // Image Helpers
+    function clearImagePreview() {
+      currentBase64Image = '';
+      document.getElementById('itemImageInput').value = '';
+      document.getElementById('fileNameDisplay').textContent = '';
+      document.getElementById('imagePreview').src = '';
+      document.getElementById('imagePreviewContainer').classList.add('hidden');
+    }
+
+    // Attach Event Listeners on Load
+    window.addEventListener('DOMContentLoaded', () => {
+      renderItems();
+
+      // Contribute Modal Buttons
+      document.getElementById('contributeBtn').addEventListener('click', openModal);
+      document.getElementById('emptyContributeBtn').addEventListener('click', openModal);
+      document.getElementById('closeModalBtn').addEventListener('click', closeModal);
+      document.getElementById('cancelFormBtn').addEventListener('click', closeModal);
+
+      // Detail Modal
+      document.getElementById('closeDetailModalBtn').addEventListener('click', closeDetailModal);
+      document.getElementById('deleteItemBtn').addEventListener('click', () => {
+        if (currentDetailItemId) deleteSingleItem(currentDetailItemId);
+      });
+
+      // Search & Filters
+      document.getElementById('searchInput').addEventListener('input', renderItems);
+      document.getElementById('categoryFilter').addEventListener('change', renderItems);
+      document.getElementById('sortBy').addEventListener('change', renderItems);
+
+      // Image Import
+      document.getElementById('chooseFileBtn').addEventListener('click', () => {
+        document.getElementById('itemImageInput').click();
+      });
+
+      document.getElementById('itemImageInput').addEventListener('change', (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+
+        if (file.size > 900 * 1024) {
+          showConfirm("Image size is too large. Please select an image under 900KB.", () => {});
+          return;
+        }
+
+        document.getElementById('fileNameDisplay').textContent = file.name;
+        const reader = new FileReader();
+        reader.onload = function(evt) {
+          currentBase64Image = evt.target.result;
+          document.getElementById('imagePreview').src = currentBase64Image;
+          document.getElementById('imagePreviewContainer').classList.remove('hidden');
+        };
+        reader.readAsDataURL(file);
+      });
+
+      document.getElementById('clearImagePreviewBtn').addEventListener('click', clearImagePreview);
+
+      // Save Contribution Form
+      document.getElementById('contributionForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const submitBtn = document.getElementById('submitBtn');
+        submitBtn.disabled = true;
+        submitBtn.textContent = 'Publishing...';
+
+        const newItem = {
+          title: document.getElementById('itemTitle').value.trim(),
+          category: document.getElementById('itemCategory').value,
+          description: document.getElementById('itemDescription').value.trim(),
+          image: currentBase64Image || '',
+          author: document.getElementById('itemAuthor').value.trim() || 'Anonymous',
+          timestamp: Date.now(),
+          date: new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
+        };
+
+        if (db) {
+          try {
+            const docRef = await addDoc(collection(db, 'fidgets'), newItem);
+            newItem.id = docRef.id;
+          } catch (err) {
+            console.warn("Firestore save warning:", err);
+          }
+        }
+
+        if (!newItem.id) {
+          newItem.id = 'local-' + Date.now();
+        }
+
+        rawItems.unshift(newItem);
+        localStorage.setItem('fidget_items_cache', JSON.stringify(rawItems));
+
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Publish';
+
+        closeModal();
+        renderItems();
+      });
+    });
+  </script>
+</body>
+</html>
